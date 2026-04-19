@@ -390,7 +390,7 @@ function showServices(type, btn) {
   const grid = document.getElementById('services-grid');
   grid.style.opacity = '0'; grid.style.transition = 'opacity .3s';
   setTimeout(() => { grid.innerHTML = type === 'companies' ? companiesServices : individualsServices; grid.style.opacity = '1'; }, 300);
-<style>
+}<style>
     .whatsapp-fixed {
         position: fixed;
         bottom: 25px;
