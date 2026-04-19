@@ -203,9 +203,9 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat-item"><div class="stat-num">+200</div><div class="stat-label">قضية منجزة</div></div>
+  <div class="stat-item"><div class="stat-num">+150</div><div class="stat-label">قضية منجزة</div></div>
   <div class="stat-item"><div class="stat-num">+3</div><div class="stat-label">سنوات خبرة</div></div>
-  <div class="stat-item"><div class="stat-num">+300</div><div class="stat-label">عميل راضٍ</div></div>
+  <div class="stat-item"><div class="stat-num">+200</div><div class="stat-label">عميل راضٍ</div></div>
   <div class="stat-item"><div class="stat-num">1</div><div class="stat-label">فرع في المملكة</div></div>
 </div>
 
@@ -289,28 +289,42 @@
       <div class="contact-card"><div class="contact-icon">✉️</div><div><div class="contact-card-label">البريد الإلكتروني</div><div class="contact-card-value"><a href="mailto:info@arwaqa.org">info@arwaqa.org</a></div></div></div>
       <div class="contact-card"><div class="contact-icon">🐦</div><div><div class="contact-card-label">تويتر / X</div><div class="contact-card-value"><a href="https://twitter.com/ArwaqaLaw" target="_blank">@ArwaqaLaw</a></div></div></div>
     </div>
-    <div class="contact-form">
-      <div class="form-title">أرسل لنا استفسارك</div>
-      <div class="form-group"><label>الاسم الكامل *</label><input type="text" placeholder="اكتب اسمك هنا"></div>
-      <div class="form-group"><label>رقم الجوال *</label><input type="tel" placeholder="05xxxxxxxx"></div>
-      <div class="form-group"><label>نوع الخدمة</label>
-        <select>
-          <option value="">اختر نوع الخدمة</option>
-          <option>القضايا التجارية والمالية</option>
-          <option>صياغة العقود</option>
-          <option>القضايا العمالية</option>
-          <option>النزاعات المصرفية</option>
-          <option>القضايا الجنائية</option>
-          <option>قضايا الأحوال الشخصية</option>
-          <option>القضايا العقارية</option>
-          <option>قضايا التركات</option>
-          <option>أخرى</option>
-        </select>
-      </div>
-      <div class="form-group"><label>تفاصيل الاستفسار</label><textarea placeholder="اكتب تفاصيل قضيتك أو استفسارك..."></textarea></div>
-      <button class="btn-submit" onclick="alert('شكراً لتواصلكم مع أروقة للمحاماة! سنتواصل معكم في أقرب وقت ممكن.')">إرسال الاستفسار ←</button>
+<form action="https://formspree.io/f/xpqkrelp" method="POST" class="contact-form">
+    <div class="form-title">أرسل لنا استفسارك</div>
+    
+    <div class="form-group">
+        <label>الاسم الكامل *</label>
+        <input type="text" name="الاسم" placeholder="اكتب اسمك هنا" required>
     </div>
-  </div>
+    
+    <div class="form-group">
+        <label>رقم الجوال *</label>
+        <input type="tel" name="الجوال" placeholder="05xxxxxxxx" required>
+    </div>
+    
+    <div class="form-group">
+        <label>نوع الخدمة</label>
+        <select name="نوع الخدمة">
+            <option value="">اختر نوع الخدمة</option>
+            <option value="القضايا التجارية والمالية">القضايا التجارية والمالية</option>
+            <option value="صياغة العقود">صياغة العقود</option>
+            <option value="القضايا العمالية">القضايا العمالية</option>
+            <option value="النزاعات المصرفية">النزاعات المصرفية</option>
+            <option value="القضايا الجنائية">القضايا الجنائية</option>
+            <option value="قضايا الأحوال الشخصية">قضايا الأحوال الشخصية</option>
+            <option value="القضايا العقارية">القضايا العقارية</option>
+            <option value="قضايا الشركات">قضايا الشركات</option>
+            <option value="أخرى">أخرى</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>تفاصيل الاستفسار</label>
+        <textarea name="الرسالة" placeholder="اكتب تفاصيل قضيتك أو استفسارك..."></textarea>
+    </div>
+    
+    <button type="submit" class="btn-submit">إرسال الاستفسار</button>
+</form>
 </section>
 
 <!-- FOOTER -->
