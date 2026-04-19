@@ -390,7 +390,34 @@ function showServices(type, btn) {
   const grid = document.getElementById('services-grid');
   grid.style.opacity = '0'; grid.style.transition = 'opacity .3s';
   setTimeout(() => { grid.innerHTML = type === 'companies' ? companiesServices : individualsServices; grid.style.opacity = '1'; }, 300);
-}
+<style>
+    .whatsapp-fixed {
+        position: fixed;
+        bottom: 25px;
+        left: 25px;
+        background-color: #25d366;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    .whatsapp-fixed:hover {
+        transform: translateY(-5px);
+        background-color: #128c7e;
+        color: white;
+    }
+</style>
+
+<a href="https://wa.me/966555583748" class="whatsapp-fixed" target="_blank">
+    <span>تواصل معنا عبر واتساب</span>
+</a>
 <script data-goatcounter="https://arwaqa-stats.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
