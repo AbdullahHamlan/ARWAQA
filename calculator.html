@@ -669,36 +669,46 @@ function calcEOSB() {
   const start = getStr('eosb-start');
   const end = getStr('eosb-end');
   if (!start || !end) { alert('يرجى إدخال تواريخ البداية والنهاية'); return; }
-  const unpaid = getVal('unpaid-days') || 0;
+  const unpaid = getVal('unpaid-days');
   const article = getRadio('eosb_article');
 
-  const totalDays = Math.max(0, daysBetween(start, end) - unpaid);
-  const totalYears = totalDays / 365;
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  let years = endDate.getFullYear() - startDate.getFullYear();
+  let months = endDate.getMonth() - startDate.getMonth();
+  let days = endDate.getDate() - startDate.getDate();
+
+  if (days < 0) {
+    months--;
+    const prevMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  // تقريب المدة للشهور لتتطابق مع حاسبة الوزارة
+  if (days >= 28) {
+    months++;
+    days = 0;
+  }
+  if (months >= 12) {
+    years++;
+    months -= 12;
+  }
+
+  const totalYears = years + (months / 12);
+  const totalDays = daysBetween(start, end) - unpaid;
   const dailySalary = basic / 30;
-
-  // حساب المدة الدقيقة (السنة، الشهر، اليوم)
-  const startD = new Date(start);
-  const endD = new Date(end);
-  let diffYears = endD.getFullYear() - startD.getFullYear();
-  let diffMonths = endD.getMonth() - startD.getMonth();
-  let diffDays = endD.getDate() - startD.getDate();
-
-  if (diffDays < 0) {
-    diffMonths--;
-    const prevMonth = new Date(endD.getFullYear(), endD.getMonth(), 0);
-    diffDays += prevMonth.getDate();
-  }
-  if (diffMonths < 0) {
-    diffYears--;
-    diffMonths += 12;
-  }
 
   let reward = 0;
   let rows = [];
 
   if (totalYears < 2 && article === '85') {
-    rows.push({ label: 'مدة الخدمة', val: `${diffYears} سنة و ${diffMonths} شهر و ${diffDays} يوم` });
-    rows.push({ label: 'ملاحظة', val: 'لا تستحق مكافأة (استقالة أقل من سنتين)' });
+    rows.push({label:'مدة الخدمة', val: `${years} سنة و ${months} شهر`});
+    rows.push({label:'ملاحظة', val:'لا تستحق مكافأة (استقالة أقل من سنتين)'});
     document.getElementById('eosb-result-rows').innerHTML = resultHTML(rows, 0, 'المكافأة المستحقة');
     document.getElementById('eosb-result').classList.add('show');
     return;
@@ -712,22 +722,22 @@ function calcEOSB() {
 
   let fullReward = base5 + baseAbove5;
 
+  // تعديل حسب المادة 85 (استقالة)
   let ratio = 1;
   if (article === '85') {
-    if (totalYears >= 2 && totalYears < 5) ratio = 1 / 3;
-    else if (totalYears >= 5 && totalYears < 10) ratio = 2 / 3;
+    if (totalYears >= 2 && totalYears < 5) ratio = 1/3;
+    else if (totalYears >= 5 && totalYears < 10) ratio = 2/3;
     else ratio = 1;
   }
   reward = fullReward * ratio;
 
   rows = [
-    { label: 'مدة الخدمة', val: `${diffYears} سنة و ${diffMonths} شهر و ${diffDays} يوم (${totalDays} يوم)` },
-    ...(unpaid > 0 ? [{ label: 'أيام الإجازات بدون أجر المستبعدة', val: `${unpaid} يوم` }] : []),
-    { label: 'الأجر الأساسي اليومي', val: `${fmt(dailySalary)} ريال` },
-    { label: 'المكافأة الكاملة المحتسبة', val: `${fmt(fullReward)} ريال` },
-    ...(article === '85' && ratio < 1 ? [{ label: `نسبة الاستحقاق (${Math.round(ratio * 100)}%)`, val: `× ${ratio.toFixed(2)}` }] : []),
+    {label:'مدة الخدمة', val:`${years} سنة و ${months} شهر`},
+    {label:'أيام الإجازات بدون أجر المستبعدة', val:`${unpaid} يوم`},
+    {label:'الأجر الأساسي اليومي', val:`${fmt(dailySalary)} ريال`},
+    {label:'المكافأة الكاملة المحتسبة', val:`${fmt(fullReward)} ريال`},
+    ...(article==='85' && ratio < 1 ? [{label:`نسبة الاستحقاق (${Math.round(ratio*100)}%)`, val:`× ${ratio.toFixed(2)}`}] : []),
   ];
-
   document.getElementById('eosb-result-rows').innerHTML = resultHTML(rows, reward, 'مكافأة نهاية الخدمة المستحقة');
   document.getElementById('eosb-result').classList.add('show');
 }
