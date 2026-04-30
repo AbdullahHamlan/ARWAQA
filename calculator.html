@@ -741,7 +741,8 @@ function calcEOSB() {
   document.getElementById('eosb-result-rows').innerHTML = resultHTML(rows, reward, 'مكافأة نهاية الخدمة المستحقة');
   document.getElementById('eosb-result').classList.add('show');
 }
-// 2. الأجور المتأخرة
+
+ // 2. الأجور المتأخرة
 function calcDelayed() {
   const total = getVal('basic-salary') + getVal('allowances');
   if (!total) { alert('يرجى إدخال الأجر'); return; }
@@ -775,6 +776,10 @@ function calcDelayed() {
     {label:'قيمة الأيام', val:`${fmt(dailyAmt)} ريال`},
   ];
   
+  // تحديث النتيجة في الواجهة
+  document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
+  document.getElementById('delayed-result').classList.add('show');
+}
   // تحديث النتيجة في الواجهة
   document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
   document.getElementById('delayed-result').classList.add('show');
