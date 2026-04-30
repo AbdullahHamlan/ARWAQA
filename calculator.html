@@ -752,8 +752,8 @@ function calcDelayed() {
     const from = getStr('delayed-from');
     const to = getStr('delayed-to');
     if (!from || !to) { alert('يرجى إدخال التواريخ'); return; }
-    // إضافة 1 لجعل حساب الفرق شاملاً لليوم الأخير
-    const totalDays = daysBetween(from, to) + 1; 
+    // حساب الفارق الفعلي دون إضافة 1 لمطابقة موقع الوزارة
+    const totalDays = daysBetween(from, to);
     months = Math.floor(totalDays / 30);
     days = totalDays % 30;
   } else {
@@ -773,6 +773,9 @@ function calcDelayed() {
     {label:'عدد الأيام الإضافية', val:`${days} يوم`},
     {label:'قيمة الأيام', val:`${fmt(dailyAmt)} ريال`},
   ];
+  document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
+  document.getElementById('delayed-result').classList.add('show');
+}
   document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
   document.getElementById('delayed-result').classList.add('show');
 }
