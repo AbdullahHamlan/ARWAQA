@@ -369,7 +369,7 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
         </div>
       </div>
       <div class="info-note">
-        <strong>المادة 84:</strong> ثلث الأجر عن كل سنة في الخمس الأولى، ثم أجر كامل عن كل سنة بعدها.<br>
+        <strong>المادة 84:</strong> نصف الأجر عن كل سنة في الخمس الأولى، ثم أجر كامل عن كل سنة بعدها.<br>
         <strong>المادة 85 (استقالة):</strong> لا مكافأة إذا كانت الخدمة أقل من سنتين — ثلث المكافأة من 2 إلى 5 سنوات — ثلثا المكافأة من 5 إلى 10 سنوات — مكافأة كاملة بعد 10 سنوات.
       </div>
       <button class="calc-btn" onclick="calcEOSB()">احسب المكافأة</button>
@@ -742,7 +742,7 @@ function calcEOSB() {
   document.getElementById('eosb-result').classList.add('show');
 }
 
- // 2. الأجور المتأخرة
+// 2. الأجور المتأخرة
 function calcDelayed() {
   const total = getVal('basic-salary') + getVal('allowances');
   if (!total) { alert('يرجى إدخال الأجر'); return; }
@@ -754,10 +754,11 @@ function calcDelayed() {
     const to = getStr('delayed-to');
     if (!from || !to) { alert('يرجى إدخال التواريخ'); return; }
     
-    // حساب الفارق الفعلي بالأيام كما يظهر في موقع الوزارة
-    const totalDays = daysBetween(from, to);
+    // حساب الفارق الفعلي بالأيام
+    const totalDays = daysBetween(from, to); 
     months = Math.floor(totalDays / 30);
-    days = totalDays % 30;
+    // تصفير الأيام لإلغاء أي أيام إضافية وجعل الحسبة تعتمد على الأشهر الكاملة فقط
+    days = 0; 
   } else {
     months = getVal('delayed-months-num');
     days = getVal('delayed-days-num');
@@ -776,10 +777,6 @@ function calcDelayed() {
     {label:'قيمة الأيام', val:`${fmt(dailyAmt)} ريال`},
   ];
   
-  // تحديث النتيجة في الواجهة
-  document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
-  document.getElementById('delayed-result').classList.add('show');
-}
   // تحديث النتيجة في الواجهة
   document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
   document.getElementById('delayed-result').classList.add('show');
@@ -862,8 +859,11 @@ function calcComp() {
     const to = getStr('comp-to');
     if (!from || !to) { alert('يرجى إدخال التواريخ'); return; }
     const remainDays = daysBetween(from, to);
-    const remainMonths = remainDays / 30;
+    
+    // استخدام Math.floor لحساب الأشهر الكاملة وتجاهل الكسور
+    const remainMonths = Math.floor(remainDays / 30);
     compAmount = remainMonths * total;
+    
     rows = [
       {label:'نوع العقد', val:'محدد المدة'},
       {label:'الأيام المتبقية من العقد', val:`${remainDays} يوم`},
@@ -884,10 +884,10 @@ function calcComp() {
       {label:'التعويض (شهران × كل سنة)', val:`${fmt(totalYears)} × 2`},
     ];
   }
+  
   document.getElementById('comp-result-rows').innerHTML = resultHTML(rows, compAmount, 'التعويض المستحق');
   document.getElementById('comp-result').classList.add('show');
 }
-
 // 6. حسم الغياب والتأخر
 function calcDeduction() {
   const basic = getVal('basic-salary');
