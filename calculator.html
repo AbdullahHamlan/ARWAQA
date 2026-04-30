@@ -663,7 +663,7 @@ function toggleContractType(type) {
 // ── CALCULATIONS ──
 
 // 1. مكافأة نهاية الخدمة
-function calcEOS() {
+function calcEOSB() {
   const basic = getVal('eos-basic') || 0; // الأجر الأساسي أو الأجر المعتمد
   const allowances = getVal('eos-allowances') || 0;
   const totalSalary = basic + allowances;
