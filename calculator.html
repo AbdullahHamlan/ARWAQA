@@ -282,7 +282,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">
     <div class="nav-logo-text">أروقة<br><span style="font-size:0.72rem;opacity:0.7;font-family:'Tajawal'">للمحاماة والاستشارات القانونية</span></div>
@@ -292,7 +291,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
   </a>
 </nav>
 
-<!-- HERO -->
 <div class="page-hero">
   <div class="page-hero-badge">وفق نظام العمل السعودي</div>
   <h1>الحاسبة <span>العمالية</span></h1>
@@ -302,7 +300,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
 
 <div class="calc-wrapper">
 
-  <!-- GLOBAL INFO -->
   <div class="global-card">
     <h2>⚙️ البيانات الأساسية للعامل</h2>
     <div class="form-row">
@@ -337,7 +334,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 1. مكافأة نهاية الخدمة -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -372,7 +368,7 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
         <strong>المادة 84:</strong> ثلث الأجر عن كل سنة في الخمس الأولى، ثم أجر كامل عن كل سنة بعدها.<br>
         <strong>المادة 85 (استقالة):</strong> لا مكافأة إذا كانت الخدمة أقل من سنتين — ثلث المكافأة من 2 إلى 5 سنوات — ثلثا المكافأة من 5 إلى 10 سنوات — مكافأة كاملة بعد 10 سنوات.
       </div>
-<button class="calc-btn" onclick="calcEOSB()">احسب المكافأة</button>
+      <button class="calc-btn" onclick="calcEOSB()">احسب المكافأة</button>
       <div class="result-box" id="eosb-result">
         <div class="result-title">نتيجة مكافأة نهاية الخدمة</div>
         <div id="eosb-result-rows"></div>
@@ -380,7 +376,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 2. الأجور المتأخرة -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -415,7 +410,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 3. أجر الإجازة -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -449,7 +443,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 4. أجر العمل الإضافي -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -490,7 +483,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 5. التعويض عن الإنهاء لغير سبب مشروع -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -529,7 +521,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 6. حسم الغياب والتأخر -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -573,7 +564,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
     </div>
   </div>
 
-  <!-- 7. أيام الإجازة المستحقة -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
       <div class="card-header-right">
@@ -607,7 +597,6 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
 
 </div>
 
-<!-- FOOTER -->
 <footer>
   <p>© 2026 أروقة للمحاماة والاستشارات القانونية — <a href="https://arwaqa.org">arwaqa.org</a> | الحاسبة استرشادية ولا تُغني عن الاستشارة القانونية</p>
 </footer>
@@ -711,10 +700,10 @@ function calcEOSB() {
     {label:'المكافأة الكاملة المحتسبة', val:`${fmt(fullReward)} ريال`},
     ...(article==='85' && ratio < 1 ? [{label:`نسبة الاستحقاق (${Math.round(ratio*100)}%)`, val:`× ${ratio.toFixed(2)}`}] : []),
   ];
-  
   document.getElementById('eosb-result-rows').innerHTML = resultHTML(rows, reward, 'مكافأة نهاية الخدمة المستحقة');
   document.getElementById('eosb-result').classList.add('show');
 }
+
 // 2. الأجور المتأخرة
 function calcDelayed() {
   const total = getVal('basic-salary') + getVal('allowances');
@@ -781,18 +770,11 @@ function calcOT() {
   const extraDays = getVal('ot-extra-days');
   const extraHours = getVal('ot-extra-hours');
 
-  // أجر الساعة الفعلي = الإجمالي ÷ (30 يوم × ساعات اليوم)
-  const monthlyWorkDays = 30;
+  const monthlyWorkDays = 26;
   const totalMonthlyHours = monthlyWorkDays * dailyHours;
   const actualHourlyRate = totalSalary / totalMonthlyHours;
-
-  // أجر الساعة الأساسي = الأساسي ÷ (30 × ساعات اليوم)
   const basicHourlyRate = basic / totalMonthlyHours;
-
-  // نصف أجر الساعة الأساسي = 50% من الأساسي بالساعة
   const halfBasicHourly = basicHourlyRate * 0.5;
-
-  // أجر ساعة الإضافي = الفعلي + 50% أساسي
   const otHourlyRate = actualHourlyRate + halfBasicHourly;
 
   const extraDaysHours = extraDays * dailyHours;
@@ -905,7 +887,6 @@ function calcLeaveDays() {
     {label:'معدل الإجازة (بعد 5 سنوات)', val:`${rate2} يوم/سنة`},
     {label:'إجمالي أيام الإجازة المستحقة', val:`${fmt(leaveDays)} يوم`},
   ];
-  // لهذا القسم لا نعرض ريال بل أياماً
   let html = '';
   rows.forEach(r => { html += `<div class="result-row"><span class="result-row-label">${r.label}</span><span class="result-row-val">${r.val}</span></div>`; });
   html += `<div class="result-total"><span class="result-total-label">إجمالي أيام الإجازة</span><span class="result-total-val">${fmt(leaveDays)} يوم</span></div>`;
