@@ -514,7 +514,8 @@ footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
       </div>
       <div id="open-contract-section" style="display:none">
         <div class="info-note">
-          في عقد غير محدد المدة: يستحق العامل أجر شهرين عن كل سنة خدمة — أو ما يعادل أجر المدة المتبقية إذا اتفق الطرفان.
+          في عقد غير محدد المدة:- أجر خمسة عشر يوماً عن كل سنة من سنوات خدمة العامل، إذا كان العقد غير محدد المدة.
+
         </div>
         <div class="form-row">
           <div class="form-group"><label>تاريخ بداية العمل</label><input type="date" id="open-start"></div>
@@ -847,7 +848,7 @@ function calcOT() {
 }
 
 // 5. التعويض عن الإنهاء
-  function calcComp() {
+ function calcComp() {
   const total = getVal('basic-salary') + getVal('allowances');
   if (!total) { alert('يرجى إدخال الأجر'); return; }
   const contractType = getRadio('contract_type');
@@ -876,12 +877,15 @@ function calcOT() {
     if (!start || !end) { alert('يرجى إدخال التواريخ'); return; }
     const totalDays = daysBetween(start, end);
     const totalYears = totalDays / 365;
-    compAmount = totalYears * total * 2;
+    
+    // احتساب التعويض: 15 يوماً (نصف شهر) عن كل سنة
+    compAmount = totalYears * (total / 2);
+    
     rows = [
       {label:'نوع العقد', val:'غير محدد المدة'},
       {label:'مدة الخدمة', val:`${fmt(totalYears)} سنة`},
       {label:'الأجر الشهري', val:`${fmt(total)} ريال`},
-      {label:'التعويض (شهران × كل سنة)', val:`${fmt(totalYears)} × 2`},
+      {label:'التعويض (15 يوماً × كل سنة)', val:`${fmt(totalYears)} × 0.5`},
     ];
   }
   
