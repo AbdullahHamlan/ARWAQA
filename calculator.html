@@ -799,18 +799,18 @@ function calcOT() {
   const extraDays = getVal('ot-extra-days');
   const extraHours = getVal('ot-extra-hours');
 
-  // أجر الساعة الفعلي = الإجمالي ÷ (26 يوم × ساعات اليوم)
-  const monthlyWorkDays = 26;
+  // أجر الساعة الفعلي = الإجمالي ÷ (30 يوم × ساعات اليوم)
+  const monthlyWorkDays = 30;
   const totalMonthlyHours = monthlyWorkDays * dailyHours;
   const actualHourlyRate = totalSalary / totalMonthlyHours;
 
-  // أجر الساعة الأساسي = الأساسي ÷ (26 × ساعات اليوم)
+  // أجر الساعة الأساسي = الأساسي ÷ (30 × ساعات اليوم)
   const basicHourlyRate = basic / totalMonthlyHours;
 
   // نصف أجر الساعة الأساسي = 50% من الأساسي بالساعة
   const halfBasicHourly = basicHourlyRate * 0.5;
 
-  // أجر ساعة الإضافي = الفعلي + 50% الأساسي
+  // أجر ساعة الإضافي = الفعلي + 50% أساسي
   const otHourlyRate = actualHourlyRate + halfBasicHourly;
 
   const extraDaysHours = extraDays * dailyHours;
