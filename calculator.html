@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الحاسبة العمالية | أروقة للمحاماة والاستشارات القانونية</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #B8922A;
+  --gold-light: #D4A843;
+  --gold-pale: #F5E9CC;
+  --dark: #1A1209;
+  --dark-mid: #2C1F0A;
+  --cream: #FAF6EE;
+  --cream-dark: #F0E8D5;
+  --text: #2C1F0A;
+  --text-light: #6B5230;
+  --green: #1a7a3c;
+  --red: #b91c1c;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Tajawal',sans-serif; background:var(--cream); color:var(--text); }
+
+/* NAV */
+nav {
+  background:rgba(26,18,9,0.97);
+  border-bottom:1px solid rgba(184,146,42,0.3);
+  padding:0 5%; display:flex; align-items:center; justify-content:space-between; height:64px;
+  position:sticky; top:0; z-index:100;
+}
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo-text { font-family:'Amiri',serif; color:var(--gold-light); font-size:1rem; line-height:1.3; }
+.nav-back { color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.88rem; display:flex; align-items:center; gap:6px; transition:color .3s; }
+.nav-back:hover { color:var(--gold-light); }
+
+/* HERO */
+.page-hero {
+  background:var(--dark);
+  padding:48px 5% 40px;
+  text-align:center;
+  border-bottom:1px solid rgba(184,146,42,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.page-hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 80% at 50% 100%, rgba(184,146,42,0.1) 0%, transparent 70%);
+}
+.page-hero-badge {
+  display:inline-block;
+  border:1px solid rgba(184,146,42,0.4);
+  color:var(--gold-light);
+  font-size:0.78rem;
+  letter-spacing:0.12em;
+  padding:5px 18px;
+  border-radius:20px;
+  margin-bottom:16px;
+  background:rgba(184,146,42,0.08);
+  position:relative;
+}
+.page-hero h1 {
+  font-family:'Amiri',serif;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  color:#fff;
+  margin-bottom:10px;
+  position:relative;
+}
+.page-hero h1 span { color:var(--gold-light); }
+.page-hero p {
+  color:rgba(255,255,255,0.5);
+  font-size:0.92rem;
+  max-width:500px;
+  margin:0 auto;
+  line-height:1.8;
+  font-weight:300;
+  position:relative;
+}
+.disclaimer {
+  background:rgba(184,146,42,0.12);
+  border:1px solid rgba(184,146,42,0.3);
+  border-radius:6px;
+  padding:10px 18px;
+  color:var(--gold-light);
+  font-size:0.82rem;
+  max-width:700px;
+  margin:20px auto 0;
+  position:relative;
+  line-height:1.7;
+}
+
+/* LAYOUT */
+.calc-wrapper {
+  max-width:900px;
+  margin:0 auto;
+  padding:40px 5% 80px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+/* CARD */
+.card {
+  background:#fff;
+  border:1px solid rgba(184,146,42,0.18);
+  border-radius:10px;
+  overflow:hidden;
+  transition:box-shadow .3s;
+}
+.card:hover { box-shadow:0 4px 24px rgba(184,146,42,0.1); }
+
+.card-header {
+  background:var(--dark);
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  user-select:none;
+}
+.card-header-right { display:flex; align-items:center; gap:12px; }
+.card-header-icon {
+  width:36px; height:36px;
+  background:rgba(184,146,42,0.15);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+}
+.card-header h2 {
+  font-family:'Amiri',serif;
+  font-size:1.05rem;
+  color:#fff;
+  font-weight:700;
+}
+.card-toggle {
+  color:var(--gold);
+  font-size:1.2rem;
+  transition:transform .3s;
+}
+.card-toggle.open { transform:rotate(180deg); }
+
+.card-body {
+  padding:24px;
+  display:none;
+  border-top:1px solid rgba(184,146,42,0.1);
+}
+.card-body.open { display:block; }
+
+/* GLOBAL INPUTS */
+.global-card { background:#fff; border:1px solid rgba(184,146,42,0.18); border-radius:10px; padding:24px; }
+.global-card h2 { font-family:'Amiri',serif; font-size:1.1rem; color:var(--text); margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--cream-dark); }
+
+/* FORM ELEMENTS */
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.form-row.three { grid-template-columns:1fr 1fr 1fr; }
+.form-row.one { grid-template-columns:1fr; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group label { font-size:0.82rem; font-weight:600; color:var(--text-light); }
+.form-group input, .form-group select {
+  padding:10px 13px;
+  border:1px solid rgba(184,146,42,0.25);
+  border-radius:6px;
+  font-family:'Tajawal',sans-serif;
+  font-size:0.9rem;
+  color:var(--text);
+  background:var(--cream);
+  outline:none;
+  transition:border-color .3s, background .3s;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color:var(--gold);
+  background:#fff;
+}
+.form-group .readonly-val {
+  padding:10px 13px;
+  border:1px solid rgba(184,146,42,0.15);
+  border-radius:6px;
+  font-size:0.9rem;
+  font-weight:700;
+  color:var(--text);
+  background:var(--cream-dark);
+}
+
+.radio-group { display:flex; gap:12px; flex-wrap:wrap; }
+.radio-btn {
+  display:flex; align-items:center; gap:6px;
+  padding:9px 16px;
+  border:1px solid rgba(184,146,42,0.3);
+  border-radius:6px;
+  cursor:pointer;
+  font-size:0.88rem;
+  font-family:'Tajawal',sans-serif;
+  color:var(--text-light);
+  transition:all .25s;
+  background:var(--cream);
+}
+.radio-btn input { display:none; }
+.radio-btn.selected {
+  background:var(--gold);
+  color:var(--dark);
+  border-color:var(--gold);
+  font-weight:700;
+}
+
+/* SECTION DIVIDER */
+.section-label-sm {
+  font-size:0.78rem;
+  font-weight:700;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.section-label-sm::before { content:''; width:20px; height:2px; background:var(--gold); display:block; }
+
+/* CALC BTN */
+.calc-btn {
+  background:var(--gold);
+  color:var(--dark);
+  border:none;
+  padding:12px 32px;
+  border-radius:6px;
+  font-family:'Tajawal',sans-serif;
+  font-size:0.95rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .3s;
+  margin-top:8px;
+}
+.calc-btn:hover { background:var(--gold-light); transform:translateY(-1px); box-shadow:0 6px 20px rgba(184,146,42,0.25); }
+
+/* RESULT */
+.result-box {
+  margin-top:16px;
+  background:var(--dark);
+  border-radius:8px;
+  padding:20px 24px;
+  display:none;
+}
+.result-box.show { display:block; }
+.result-title { color:var(--gold-light); font-family:'Amiri',serif; font-size:1rem; margin-bottom:12px; }
+.result-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.result-row:last-child { border-bottom:none; }
+.result-row-label { color:rgba(255,255,255,0.6); font-size:0.85rem; }
+.result-row-val { color:#fff; font-weight:700; font-size:0.95rem; }
+.result-total { background:rgba(184,146,42,0.15); border-radius:6px; padding:14px 18px; margin-top:12px; display:flex; justify-content:space-between; align-items:center; }
+.result-total-label { color:var(--gold-light); font-weight:700; font-size:0.95rem; }
+.result-total-val { color:var(--gold-light); font-family:'Amiri',serif; font-size:1.4rem; font-weight:700; }
+
+/* INFO NOTE */
+.info-note {
+  background:rgba(184,146,42,0.08);
+  border-right:3px solid var(--gold);
+  border-radius:4px;
+  padding:10px 14px;
+  font-size:0.8rem;
+  color:var(--text-light);
+  line-height:1.7;
+  margin-top:12px;
+}
+
+/* FOOTER */
+footer {
+  background:var(--dark);
+  border-top:1px solid rgba(184,146,42,0.2);
+  padding:24px 5%;
+  text-align:center;
+}
+footer p { color:rgba(255,255,255,0.3); font-size:0.8rem; }
+footer a { color:rgba(184,146,42,0.6); text-decoration:none; }
+
+@media(max-width:600px) {
+  .form-row { grid-template-columns:1fr; }
+  .form-row.three { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-text">أروقة<br><span style="font-size:0.72rem;opacity:0.7;font-family:'Tajawal'">للمحاماة والاستشارات القانونية</span></div>
+  </a>
+  <a href="index.html" class="nav-back">
+    ← العودة للموقع الرئيسي
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-badge">وفق نظام العمل السعودي</div>
+  <h1>الحاسبة <span>العمالية</span></h1>
+  <p>احسب مستحقاتك العمالية بدقة وفق أحكام نظام العمل السعودي وتعديلاته</p>
+  <div class="disclaimer">⚠️ إصدار استرشادي — النتائج تقديرية وفق نظام العمل، ولا تُغني عن استشارة محامٍ متخصص</div>
+</div>
+
+<div class="calc-wrapper">
+
+  <!-- GLOBAL INFO -->
+  <div class="global-card">
+    <h2>⚙️ البيانات الأساسية للعامل</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>جنسية العامل</label>
+        <div class="radio-group" id="nationality-group">
+          <label class="radio-btn selected" onclick="selectRadio(this,'nationality-group')"><input type="radio" name="nationality" value="saudi" checked>سعودي</label>
+          <label class="radio-btn" onclick="selectRadio(this,'nationality-group')"><input type="radio" name="nationality" value="nonsaudi">غير سعودي</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>نوع التقويم</label>
+        <div class="radio-group" id="calendar-group">
+          <label class="radio-btn selected" onclick="selectRadio(this,'calendar-group')"><input type="radio" name="calendar" value="hijri" checked>هجري</label>
+          <label class="radio-btn" onclick="selectRadio(this,'calendar-group')"><input type="radio" name="calendar" value="gregorian">ميلادي</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row three">
+      <div class="form-group">
+        <label>الأجر الأساسي (ريال)</label>
+        <input type="number" id="basic-salary" placeholder="مثال: 5000" oninput="updateTotal()">
+      </div>
+      <div class="form-group">
+        <label>البدلات (ريال)</label>
+        <input type="number" id="allowances" placeholder="مثال: 1000" oninput="updateTotal()">
+      </div>
+      <div class="form-group">
+        <label>الإجمالي (ريال)</label>
+        <div class="readonly-val" id="total-salary">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. مكافأة نهاية الخدمة -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">🏆</div>
+        <h2>مكافأة نهاية الخدمة</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label-sm">طريقة احتساب المكافأة</div>
+      <div class="radio-group" id="eosb-article-group" style="margin-bottom:16px">
+        <label class="radio-btn selected" onclick="selectRadio(this,'eosb-article-group')"><input type="radio" name="eosb_article" value="84" checked>المادة (84) — إنهاء من صاحب العمل</label>
+        <label class="radio-btn" onclick="selectRadio(this,'eosb-article-group')"><input type="radio" name="eosb_article" value="85">المادة (85) — استقالة العامل</label>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>تاريخ بداية العمل</label>
+          <input type="date" id="eosb-start">
+        </div>
+        <div class="form-group">
+          <label>تاريخ نهاية العمل</label>
+          <input type="date" id="eosb-end">
+        </div>
+      </div>
+      <div class="form-row one">
+        <div class="form-group">
+          <label>إجمالي أيام الإجازات بدون أجر</label>
+          <input type="number" id="unpaid-days" placeholder="0" value="0">
+        </div>
+      </div>
+      <div class="info-note">
+        <strong>المادة 84:</strong> ثلث الأجر عن كل سنة في الخمس الأولى، ثم أجر كامل عن كل سنة بعدها.<br>
+        <strong>المادة 85 (استقالة):</strong> لا مكافأة إذا كانت الخدمة أقل من سنتين — ثلث المكافأة من 2 إلى 5 سنوات — ثلثا المكافأة من 5 إلى 10 سنوات — مكافأة كاملة بعد 10 سنوات.
+      </div>
+      <button class="calc-btn" onclick="calcEOSB()">احسب المكافأة</button>
+      <div class="result-box" id="eosb-result">
+        <div class="result-title">نتيجة مكافأة نهاية الخدمة</div>
+        <div id="eosb-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. الأجور المتأخرة -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">💰</div>
+        <h2>الأجور المتأخرة</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label-sm">طريقة الإدخال</div>
+      <div class="radio-group" id="delayed-method-group" style="margin-bottom:16px">
+        <label class="radio-btn selected" onclick="selectRadio(this,'delayed-method-group');toggleDelayedMethod('dates')"><input type="radio" name="delayed_method" value="dates" checked>بإدخال التاريخ من / إلى</label>
+        <label class="radio-btn" onclick="selectRadio(this,'delayed-method-group');toggleDelayedMethod('months')"><input type="radio" name="delayed_method" value="months">بإدخال عدد الأشهر والأيام</label>
+      </div>
+      <div id="delayed-dates-section">
+        <div class="form-row">
+          <div class="form-group"><label>من تاريخ</label><input type="date" id="delayed-from"></div>
+          <div class="form-group"><label>إلى تاريخ</label><input type="date" id="delayed-to"></div>
+        </div>
+      </div>
+      <div id="delayed-months-section" style="display:none">
+        <div class="form-row">
+          <div class="form-group"><label>عدد الأشهر</label><input type="number" id="delayed-months-num" placeholder="0" value="0"></div>
+          <div class="form-group"><label>عدد الأيام</label><input type="number" id="delayed-days-num" placeholder="0" value="0"></div>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcDelayed()">احسب الأجور المتأخرة</button>
+      <div class="result-box" id="delayed-result">
+        <div class="result-title">نتيجة الأجور المتأخرة</div>
+        <div id="delayed-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. أجر الإجازة -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">🌴</div>
+        <h2>أجر الإجازة السنوية</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>عدد أيام الإجازة المستحقة</label>
+          <input type="number" id="leave-days" placeholder="21">
+        </div>
+        <div class="form-group">
+          <label>نوع الأجر المحتسب</label>
+          <select id="leave-salary-type">
+            <option value="basic">الأجر الأساسي فقط</option>
+            <option value="total">الأجر الإجمالي</option>
+          </select>
+        </div>
+      </div>
+      <div class="info-note">
+        الإجازة 21 يوماً للخمس سنوات الأولى، وترتفع إلى 30 يوماً بعد 5 سنوات خدمة متواصلة.
+      </div>
+      <button class="calc-btn" onclick="calcLeave()">احسب أجر الإجازة</button>
+      <div class="result-box" id="leave-result">
+        <div class="result-title">نتيجة أجر الإجازة</div>
+        <div id="leave-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. أجر العمل الإضافي -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">⏰</div>
+        <h2>أجر العمل الإضافي</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="form-row three">
+        <div class="form-group">
+          <label>ساعات اليوم الفعلية</label>
+          <select id="ot-daily-hours">
+            <option value="8" selected>8 ساعات</option>
+            <option value="7">7 ساعات</option>
+            <option value="6">6 ساعات</option>
+            <option value="9">9 ساعات</option>
+            <option value="10">10 ساعات</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>عدد الأيام الإضافية</label>
+          <input type="number" id="ot-extra-days" placeholder="0" value="0">
+        </div>
+        <div class="form-group">
+          <label>عدد الساعات الإضافية</label>
+          <input type="number" id="ot-extra-hours" placeholder="0" value="0">
+        </div>
+      </div>
+      <div class="info-note">
+        <strong>الصيغة النظامية:</strong> أجر ساعة الإضافي = أجر الساعة الفعلي (الإجمالي) + 50% من أجر الساعة الأساسي — وفق المادة (107) من نظام العمل السعودي.
+      </div>
+      <button class="calc-btn" onclick="calcOT()">احسب العمل الإضافي</button>
+      <div class="result-box" id="ot-result">
+        <div class="result-title">نتيجة أجر العمل الإضافي</div>
+        <div id="ot-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. التعويض عن الإنهاء لغير سبب مشروع -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">⚖️</div>
+        <h2>التعويض عن الإنهاء لغير سبب مشروع</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label-sm">نوع العقد</div>
+      <div class="radio-group" id="contract-type-group" style="margin-bottom:16px">
+        <label class="radio-btn selected" onclick="selectRadio(this,'contract-type-group');toggleContractType('fixed')"><input type="radio" name="contract_type" value="fixed" checked>عقد محدد المدة</label>
+        <label class="radio-btn" onclick="selectRadio(this,'contract-type-group');toggleContractType('open')"><input type="radio" name="contract_type" value="open">عقد غير محدد المدة</label>
+      </div>
+      <div id="fixed-contract-section">
+        <div class="form-row">
+          <div class="form-group"><label>من تاريخ الإنهاء</label><input type="date" id="comp-from"></div>
+          <div class="form-group"><label>إلى نهاية العقد</label><input type="date" id="comp-to"></div>
+        </div>
+        <div class="info-note">يستحق العامل أجر المدة المتبقية من العقد كاملاً عند الإنهاء لغير سبب مشروع.</div>
+      </div>
+      <div id="open-contract-section" style="display:none">
+        <div class="info-note">
+          في عقد غير محدد المدة: يستحق العامل أجر شهرين عن كل سنة خدمة — أو ما يعادل أجر المدة المتبقية إذا اتفق الطرفان.
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>تاريخ بداية العمل</label><input type="date" id="open-start"></div>
+          <div class="form-group"><label>تاريخ الإنهاء</label><input type="date" id="open-end"></div>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcComp()">احسب التعويض</button>
+      <div class="result-box" id="comp-result">
+        <div class="result-title">نتيجة التعويض</div>
+        <div id="comp-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. حسم الغياب والتأخر -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">📉</div>
+        <h2>حسم الغياب والتأخر</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>ساعات العمل اليومية</label>
+          <select id="deduct-daily-hours">
+            <option value="8" selected>8 ساعات</option>
+            <option value="7">7 ساعات</option>
+            <option value="6">6 ساعات</option>
+            <option value="9">9 ساعات</option>
+            <option value="10">10 ساعات</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>عدد أيام الغياب</label>
+          <input type="number" id="absent-days" placeholder="0" value="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>عدد ساعات التأخر</label>
+          <input type="number" id="late-hours" placeholder="0" value="0">
+        </div>
+        <div class="form-group">
+          <label>عدد دقائق التأخر</label>
+          <input type="number" id="late-minutes" placeholder="0" value="0">
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcDeduction()">احسب الحسم</button>
+      <div class="result-box" id="deduct-result">
+        <div class="result-title">نتيجة الحسم</div>
+        <div id="deduct-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. أيام الإجازة المستحقة -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-header-right">
+        <div class="card-header-icon">📅</div>
+        <h2>أيام الإجازة المستحقة في فترة الخدمة</h2>
+      </div>
+      <span class="card-toggle">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>أيام الإجازة في أول 5 سنوات (الحد الأدنى 21)</label>
+          <input type="number" id="leave-rate-1" placeholder="21" value="21" min="21">
+        </div>
+        <div class="form-group">
+          <label>أيام الإجازة بعد 5 سنوات (الحد الأدنى 30)</label>
+          <input type="number" id="leave-rate-2" placeholder="30" value="30" min="30">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>تاريخ بداية العمل</label><input type="date" id="leave-calc-start"></div>
+        <div class="form-group"><label>تاريخ نهاية الخدمة</label><input type="date" id="leave-calc-end"></div>
+      </div>
+      <button class="calc-btn" onclick="calcLeaveDays()">احسب أيام الإجازة</button>
+      <div class="result-box" id="leave-days-result">
+        <div class="result-title">نتيجة أيام الإجازة المستحقة</div>
+        <div id="leave-days-result-rows"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 أروقة للمحاماة والاستشارات القانونية — <a href="https://arwaqa.org">arwaqa.org</a> | الحاسبة استرشادية ولا تُغني عن الاستشارة القانونية</p>
+</footer>
+
+<script>
+// ── HELPERS ──
+function fmt(n) { return Number(n).toLocaleString('ar-SA', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function getStr(id) { return document.getElementById(id).value; }
+function getRadio(name) { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; }
+function daysBetween(d1, d2) { return Math.max(0, Math.round((new Date(d2) - new Date(d1)) / 86400000)); }
+function monthsBetween(d1, d2) {
+  const a = new Date(d1), b = new Date(d2);
+  return Math.max(0, (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) + (b.getDate() >= a.getDate() ? 0 : -1));
+}
+
+function resultHTML(rows, total, totalLabel) {
+  let html = '';
+  rows.forEach(r => { html += `<div class="result-row"><span class="result-row-label">${r.label}</span><span class="result-row-val">${r.val}</span></div>`; });
+  html += `<div class="result-total"><span class="result-total-label">${totalLabel}</span><span class="result-total-val">${fmt(total)} ريال</span></div>`;
+  return html;
+}
+
+// ── UI ──
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.card-toggle');
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function selectRadio(label, groupId) {
+  document.querySelectorAll(`#${groupId} .radio-btn`).forEach(l => l.classList.remove('selected'));
+  label.classList.add('selected');
+}
+
+function updateTotal() {
+  const basic = getVal('basic-salary');
+  const allow = getVal('allowances');
+  document.getElementById('total-salary').textContent = fmt(basic + allow);
+}
+
+function toggleDelayedMethod(method) {
+  document.getElementById('delayed-dates-section').style.display = method === 'dates' ? '' : 'none';
+  document.getElementById('delayed-months-section').style.display = method === 'months' ? '' : 'none';
+}
+
+function toggleContractType(type) {
+  document.getElementById('fixed-contract-section').style.display = type === 'fixed' ? '' : 'none';
+  document.getElementById('open-contract-section').style.display = type === 'open' ? '' : 'none';
+}
+
+// ── CALCULATIONS ──
+
+// 1. مكافأة نهاية الخدمة
+function calcEOSB() {
+  const basic = getVal('basic-salary');
+  if (!basic) { alert('يرجى إدخال الأجر الأساسي'); return; }
+  const start = getStr('eosb-start');
+  const end = getStr('eosb-end');
+  if (!start || !end) { alert('يرجى إدخال تواريخ البداية والنهاية'); return; }
+  const unpaid = getVal('unpaid-days');
+  const article = getRadio('eosb_article');
+
+  const totalDays = daysBetween(start, end) - unpaid;
+  const totalYears = totalDays / 365;
+  const dailySalary = basic / 30;
+
+  let reward = 0;
+  let rows = [];
+
+  if (totalYears < 2 && article === '85') {
+    rows.push({label:'مدة الخدمة', val: `${Math.floor(totalYears)} سنة / ${totalDays} يوم`});
+    rows.push({label:'ملاحظة', val:'لا تستحق مكافأة (استقالة أقل من سنتين)'});
+    document.getElementById('eosb-result-rows').innerHTML = resultHTML(rows, 0, 'المكافأة المستحقة');
+    document.getElementById('eosb-result').classList.add('show');
+    return;
+  }
+
+  // حساب المكافأة
+  const years5 = Math.min(totalYears, 5);
+  const yearsAbove5 = Math.max(0, totalYears - 5);
+  const base5 = years5 * (basic / 2); // نصف شهر لكل سنة
+  const baseAbove5 = yearsAbove5 * basic; // شهر لكل سنة
+
+  let fullReward = base5 + baseAbove5;
+
+  // تعديل حسب المادة 85 (استقالة)
+  let ratio = 1;
+  if (article === '85') {
+    if (totalYears >= 2 && totalYears < 5) ratio = 1/3;
+    else if (totalYears >= 5 && totalYears < 10) ratio = 2/3;
+    else ratio = 1;
+  }
+  reward = fullReward * ratio;
+
+  rows = [
+    {label:'مدة الخدمة', val:`${Math.floor(totalYears)} سنة و ${Math.round((totalYears % 1) * 12)} شهر (${totalDays} يوم)`},
+    {label:'أيام الإجازات بدون أجر المستبعدة', val:`${unpaid} يوم`},
+    {label:'الأجر الأساسي اليومي', val:`${fmt(dailySalary)} ريال`},
+    {label:'المكافأة الكاملة المحتسبة', val:`${fmt(fullReward)} ريال`},
+    ...(article==='85' && ratio < 1 ? [{label:`نسبة الاستحقاق (${Math.round(ratio*100)}%)`, val:`× ${ratio.toFixed(2)}`}] : []),
+  ];
+  document.getElementById('eosb-result-rows').innerHTML = resultHTML(rows, reward, 'مكافأة نهاية الخدمة المستحقة');
+  document.getElementById('eosb-result').classList.add('show');
+}
+
+// 2. الأجور المتأخرة
+function calcDelayed() {
+  const total = getVal('basic-salary') + getVal('allowances');
+  if (!total) { alert('يرجى إدخال الأجر'); return; }
+  const method = getRadio('delayed_method');
+  let months = 0, days = 0;
+
+  if (method === 'dates') {
+    const from = getStr('delayed-from');
+    const to = getStr('delayed-to');
+    if (!from || !to) { alert('يرجى إدخال التواريخ'); return; }
+    const totalDays = daysBetween(from, to);
+    months = Math.floor(totalDays / 30);
+    days = totalDays % 30;
+  } else {
+    months = getVal('delayed-months-num');
+    days = getVal('delayed-days-num');
+  }
+
+  const dailySalary = total / 30;
+  const monthlyAmt = months * total;
+  const dailyAmt = days * dailySalary;
+  const grandTotal = monthlyAmt + dailyAmt;
+
+  const rows = [
+    {label:'الأجر الشهري الإجمالي', val:`${fmt(total)} ريال`},
+    {label:'عدد الأشهر', val:`${months} شهر`},
+    {label:'قيمة الأشهر', val:`${fmt(monthlyAmt)} ريال`},
+    {label:'عدد الأيام الإضافية', val:`${days} يوم`},
+    {label:'قيمة الأيام', val:`${fmt(dailyAmt)} ريال`},
+  ];
+  document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
+  document.getElementById('delayed-result').classList.add('show');
+}
+
+// 3. أجر الإجازة
+function calcLeave() {
+  const leaveDays = getVal('leave-days');
+  if (!leaveDays) { alert('يرجى إدخال عدد أيام الإجازة'); return; }
+  const salaryType = getStr('leave-salary-type');
+  const basic = getVal('basic-salary');
+  const total = basic + getVal('allowances');
+  const base = salaryType === 'basic' ? basic : total;
+  if (!base) { alert('يرجى إدخال الأجر'); return; }
+
+  const dailyRate = base / 30;
+  const leaveAmt = dailyRate * leaveDays;
+
+  const rows = [
+    {label:'الأجر المحتسب', val:`${fmt(base)} ريال`},
+    {label:'الأجر اليومي', val:`${fmt(dailyRate)} ريال`},
+    {label:'عدد أيام الإجازة', val:`${leaveDays} يوم`},
+  ];
+  document.getElementById('leave-result-rows').innerHTML = resultHTML(rows, leaveAmt, 'أجر الإجازة المستحق');
+  document.getElementById('leave-result').classList.add('show');
+}
+
+// 4. العمل الإضافي
+function calcOT() {
+  const basic = getVal('basic-salary');
+  const totalSalary = basic + getVal('allowances');
+  if (!basic) { alert('يرجى إدخال الأجر الأساسي'); return; }
+  const dailyHours = getVal('ot-daily-hours') || 8;
+  const extraDays = getVal('ot-extra-days');
+  const extraHours = getVal('ot-extra-hours');
+
+  // أجر الساعة الفعلي = الإجمالي ÷ (26 يوم × ساعات اليوم)
+  const monthlyWorkDays = 26;
+  const totalMonthlyHours = monthlyWorkDays * dailyHours;
+  const actualHourlyRate = totalSalary / totalMonthlyHours;
+
+  // أجر الساعة الأساسي = الأساسي ÷ (26 × ساعات اليوم)
+  const basicHourlyRate = basic / totalMonthlyHours;
+
+  // نصف أجر الساعة الأساسي = 50% من الأساسي بالساعة
+  const halfBasicHourly = basicHourlyRate * 0.5;
+
+  // أجر ساعة الإضافي = الفعلي + 50% الأساسي
+  const otHourlyRate = actualHourlyRate + halfBasicHourly;
+
+  const extraDaysHours = extraDays * dailyHours;
+  const totalOTHours = extraDaysHours + extraHours;
+  const otAmount = totalOTHours * otHourlyRate;
+
+  const rows = [
+    {label:'الأجر الإجمالي الشهري', val:`${fmt(totalSalary)} ريال`},
+    {label:'الأجر الأساسي الشهري', val:`${fmt(basic)} ريال`},
+    {label:'إجمالي ساعات العمل الشهرية', val:`${totalMonthlyHours} ساعة`},
+    {label:'أجر الساعة الفعلي (الإجمالي ÷ الساعات)', val:`${fmt(actualHourlyRate)} ريال`},
+    {label:'أجر الساعة الأساسي', val:`${fmt(basicHourlyRate)} ريال`},
+    {label:'50% من أجر الساعة الأساسي', val:`${fmt(halfBasicHourly)} ريال`},
+    {label:'أجر ساعة العمل الإضافي (فعلي + 50% أساسي)', val:`${fmt(otHourlyRate)} ريال`},
+    {label:'ساعات إضافية من أيام', val:`${extraDaysHours} ساعة`},
+    {label:'ساعات إضافية منفردة', val:`${extraHours} ساعة`},
+    {label:'إجمالي ساعات الإضافي', val:`${totalOTHours} ساعة`},
+  ];
+  document.getElementById('ot-result-rows').innerHTML = resultHTML(rows, otAmount, 'إجمالي أجر العمل الإضافي');
+  document.getElementById('ot-result').classList.add('show');
+}
+
+// 5. التعويض عن الإنهاء
+function calcComp() {
+  const total = getVal('basic-salary') + getVal('allowances');
+  if (!total) { alert('يرجى إدخال الأجر'); return; }
+  const contractType = getRadio('contract_type');
+  let compAmount = 0;
+  let rows = [];
+
+  if (contractType === 'fixed') {
+    const from = getStr('comp-from');
+    const to = getStr('comp-to');
+    if (!from || !to) { alert('يرجى إدخال التواريخ'); return; }
+    const remainDays = daysBetween(from, to);
+    const remainMonths = remainDays / 30;
+    compAmount = remainMonths * total;
+    rows = [
+      {label:'نوع العقد', val:'محدد المدة'},
+      {label:'الأيام المتبقية من العقد', val:`${remainDays} يوم`},
+      {label:'الأشهر المتبقية (تقريبي)', val:`${fmt(remainMonths)} شهر`},
+      {label:'الأجر الشهري', val:`${fmt(total)} ريال`},
+    ];
+  } else {
+    const start = getStr('open-start');
+    const end = getStr('open-end');
+    if (!start || !end) { alert('يرجى إدخال التواريخ'); return; }
+    const totalDays = daysBetween(start, end);
+    const totalYears = totalDays / 365;
+    compAmount = totalYears * total * 2;
+    rows = [
+      {label:'نوع العقد', val:'غير محدد المدة'},
+      {label:'مدة الخدمة', val:`${fmt(totalYears)} سنة`},
+      {label:'الأجر الشهري', val:`${fmt(total)} ريال`},
+      {label:'التعويض (شهران × كل سنة)', val:`${fmt(totalYears)} × 2`},
+    ];
+  }
+  document.getElementById('comp-result-rows').innerHTML = resultHTML(rows, compAmount, 'التعويض المستحق');
+  document.getElementById('comp-result').classList.add('show');
+}
+
+// 6. حسم الغياب والتأخر
+function calcDeduction() {
+  const basic = getVal('basic-salary');
+  if (!basic) { alert('يرجى إدخال الأجر الأساسي'); return; }
+  const dailyHours = getVal('deduct-daily-hours') || 8;
+  const absentDays = getVal('absent-days');
+  const lateHours = getVal('late-hours');
+  const lateMinutes = getVal('late-minutes');
+
+  const dailySalary = basic / 30;
+  const hourlySalary = dailySalary / dailyHours;
+  const minuteSalary = hourlySalary / 60;
+
+  const absentDeduct = absentDays * dailySalary;
+  const lateDeduct = (lateHours * hourlySalary) + (lateMinutes * minuteSalary);
+  const totalDeduct = absentDeduct + lateDeduct;
+
+  const rows = [
+    {label:'الأجر اليومي', val:`${fmt(dailySalary)} ريال`},
+    {label:'الأجر بالساعة', val:`${fmt(hourlySalary)} ريال`},
+    {label:`حسم الغياب (${absentDays} يوم)`, val:`${fmt(absentDeduct)} ريال`},
+    {label:`حسم التأخر (${lateHours} ساعة و ${lateMinutes} دقيقة)`, val:`${fmt(lateDeduct)} ريال`},
+  ];
+  document.getElementById('deduct-result-rows').innerHTML = resultHTML(rows, totalDeduct, 'إجمالي الحسم');
+  document.getElementById('deduct-result').classList.add('show');
+}
+
+// 7. أيام الإجازة المستحقة
+function calcLeaveDays() {
+  const start = getStr('leave-calc-start');
+  const end = getStr('leave-calc-end');
+  if (!start || !end) { alert('يرجى إدخال التواريخ'); return; }
+
+  const rate1 = getVal('leave-rate-1') || 21;
+  const rate2 = getVal('leave-rate-2') || 30;
+  const totalDays = daysBetween(start, end);
+  const totalYears = totalDays / 365;
+
+  let leaveDays = 0;
+  if (totalYears <= 5) {
+    leaveDays = totalYears * rate1;
+  } else {
+    leaveDays = 5 * rate1 + (totalYears - 5) * rate2;
+  }
+
+  const rows = [
+    {label:'مدة الخدمة', val:`${fmt(totalYears)} سنة (${totalDays} يوم)`},
+    {label:'معدل الإجازة (أول 5 سنوات)', val:`${rate1} يوم/سنة`},
+    {label:'معدل الإجازة (بعد 5 سنوات)', val:`${rate2} يوم/سنة`},
+    {label:'إجمالي أيام الإجازة المستحقة', val:`${fmt(leaveDays)} يوم`},
+  ];
+  // لهذا القسم لا نعرض ريال بل أياماً
+  let html = '';
+  rows.forEach(r => { html += `<div class="result-row"><span class="result-row-label">${r.label}</span><span class="result-row-val">${r.val}</span></div>`; });
+  html += `<div class="result-total"><span class="result-total-label">إجمالي أيام الإجازة</span><span class="result-total-val">${fmt(leaveDays)} يوم</span></div>`;
+  document.getElementById('leave-days-result-rows').innerHTML = html;
+  document.getElementById('leave-days-result').classList.add('show');
+}
+</script>
+</body>
+</html>
