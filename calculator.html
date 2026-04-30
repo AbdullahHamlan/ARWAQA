@@ -847,7 +847,7 @@ function calcOT() {
 }
 
 // 5. التعويض عن الإنهاء
-function calcComp() {
+  function calcComp() {
   const total = getVal('basic-salary') + getVal('allowances');
   if (!total) { alert('يرجى إدخال الأجر'); return; }
   const contractType = getRadio('contract_type');
