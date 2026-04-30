@@ -683,40 +683,50 @@ function calcEOSB() {
 
   const halfMonthSalary = basic / 2; // أجر نصف شهر
   let reward = 0;
+  let fullReward = 0;
   let rows = [];
 
-  // حساب المكافأة بناءً على المدة (نصف شهر عن الخمس الأولى، وشهر عن السنوات التالية)
-  const days5 = 5 * 365;
+  // 1. حساب المكافأة وفق المادة 84
+  const days5 = 5 * 365; // 1825 يوم
 
   if (totalDays <= days5) {
-    reward = (totalDays / 365) * halfMonthSalary;
+    fullReward = (totalDays / 365) * halfMonthSalary;
+    reward = fullReward;
   } else {
     const reward5 = 5 * halfMonthSalary;
     const daysAbove5 = totalDays - days5;
     const rewardAbove5 = (daysAbove5 / 365) * basic;
-    reward = reward5 + rewardAbove5;
+    fullReward = reward5 + rewardAbove5;
+    reward = fullReward;
   }
 
-  // معالجة نسب المادة 85 (الاستقالة)
+  // 2. معالجة نسب الاستقالة وفق المادة 85
   let note = '';
   if (article === '85') {
     if (totalYears < 2) {
       reward = 0;
       note = 'لا تستحق مكافأة (استقالة بأقل من سنتين)';
     } else if (totalYears >= 2 && totalYears < 5) {
-      reward = reward * (1 / 3);
+      reward = fullReward * (1 / 3);
       note = 'يستحق ثلث المكافأة (استقالة بين سنتين إلى 5 سنوات)';
     } else if (totalYears >= 5 && totalYears < 10) {
-      reward = reward * (2 / 3);
+      reward = fullReward * (2 / 3);
       note = 'يستحق ثلثي المكافأة (استقالة بين 5 سنوات إلى 10 سنوات)';
     } else {
+      reward = fullReward;
       note = 'يستحق المكافأة كاملة';
     }
   }
 
-  rows.push({ label: 'مدة الخدمة', val: `${fullYears} سنة و ${fullMonths} شهر و ${remainDays2} يوم` });
-
-  if (article === '85' && note) {
+  rows.push({ label: 'مدة الخدمة الفعلية', val: `${fullYears} سنة و ${fullMonths} شهر و ${remainDays2} يوم (${totalDays} يوم)` });
+  
+  if (unpaid > 0) {
+    rows.push({ label: 'أيام الإجازات بدون أجر', val: `${unpaid} يوم` });
+  }
+  
+  rows.push({ label: 'المكافأة الكاملة المحتسبة', val: `${fmt(fullReward)} ريال` });
+  
+  if (article === '85') {
     rows.push({ label: 'ملاحظة', val: note });
   }
 
