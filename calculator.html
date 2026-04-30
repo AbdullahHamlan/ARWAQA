@@ -775,10 +775,7 @@ function calcDelayed() {
   ];
   document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
   document.getElementById('delayed-result').classList.add('show');
-}
-  document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
-  document.getElementById('delayed-result').classList.add('show');
-}
+
 // 3. أجر الإجازة
 function calcLeave() {
   const leaveDays = getVal('leave-days');
