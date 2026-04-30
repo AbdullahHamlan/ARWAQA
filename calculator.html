@@ -752,7 +752,8 @@ function calcDelayed() {
     const from = getStr('delayed-from');
     const to = getStr('delayed-to');
     if (!from || !to) { alert('يرجى إدخال التواريخ'); return; }
-    // حساب الفارق الفعلي دون إضافة 1 لمطابقة موقع الوزارة
+    
+    // حساب الفارق الفعلي بالأيام كما يظهر في موقع الوزارة
     const totalDays = daysBetween(from, to);
     months = Math.floor(totalDays / 30);
     days = totalDays % 30;
@@ -773,9 +774,11 @@ function calcDelayed() {
     {label:'عدد الأيام الإضافية', val:`${days} يوم`},
     {label:'قيمة الأيام', val:`${fmt(dailyAmt)} ريال`},
   ];
+  
+  // تحديث النتيجة في الواجهة
   document.getElementById('delayed-result-rows').innerHTML = resultHTML(rows, grandTotal, 'إجمالي الأجور المتأخرة');
   document.getElementById('delayed-result').classList.add('show');
-
+}
 // 3. أجر الإجازة
 function calcLeave() {
   const leaveDays = getVal('leave-days');
